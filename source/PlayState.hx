@@ -60,6 +60,7 @@ class PlayState extends MusicBeatState
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
+	public static var introstart:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
@@ -180,13 +181,22 @@ class PlayState extends MusicBeatState
 	var stagebg:FlxSprite;
 	var dancer1:BackgroundDancer;
 	var dancer2:BackgroundDancer;
+	var dancerlimo2:BackgroundDancer;
+	var dancerlimo3:BackgroundDancer;
 	var dancerlimo1:BackgroundDancer;
+	var dancerlimo4:BackgroundDancer;
+	var dancerlimo5:BackgroundDancer;
 	var picosing:Bool = false;
 	var center:Bool = false;
 	var bfsing:Bool = false;
 	var p2sing:Bool = false;
-
+	var bop:FlxSprite;
+	var bop2:FlxSprite;
+	var screen:FlxSprite;
+	var lightroom:FlxSprite;
+	var introsong:FlxSprite = new FlxSprite(0, 0);
 	var playersing:String = 'singnow';
+	var swagCounter:Int;
 
 
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
@@ -738,7 +748,7 @@ class PlayState extends MusicBeatState
 		                  skyBG.scrollFactor.set(0.1, 0.1);
 		                  add(skyBG);
 
-		                  bgLimo = new FlxSprite(1000, 480);
+		                  bgLimo = new FlxSprite(10000, 480);
 		                  bgLimo.frames = Paths.getSparrowAtlas('limopreload/bgLimo');
 		                  bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
 		                  bgLimo.animation.play('drive');
@@ -752,10 +762,11 @@ class PlayState extends MusicBeatState
 		                  {
 								  dancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
 		                          dancer.scrollFactor.set(0.4, 0.4);
+								  grpLimoDancers.visible = false;
 		                          grpLimoDancers.add(dancer);
 		                  }
 
-						  dancerlimo1 = new BackgroundDancer(370 , bgLimo.y - 40);
+						  
 						  dancer1 = new BackgroundDancer(-10000 , 200);
 						  dancer1.scrollFactor.set(0.9, 0.9);
 						  dancer1.scale.set(1.5, 1.5);
@@ -764,15 +775,27 @@ class PlayState extends MusicBeatState
 						  dancer2.scrollFactor.set(0.9, 0.9);
 						  dancer2.scale.set(1.5, 1.5);
 
+						  dancerlimo1 = new BackgroundDancer(10000 , 70);
+						  dancerlimo1.scrollFactor.set(0.4, 0.4);
+						  dancerlimo1.scale.set(1.1, 1.1);
+						  dancerlimo2 = new BackgroundDancer(390 , -1000);
+						  dancerlimo2.scrollFactor.set(0.4, 0.4);
+						  dancerlimo2.scale.set(1.1, 1.1);
+						  dancerlimo3 = new BackgroundDancer(760 , -1000);
+						  dancerlimo3.scrollFactor.set(0.4, 0.4);
+						  dancerlimo3.scale.set(1.1, 1.1);
+						  dancerlimo4 = new BackgroundDancer(1100 , -1000);
+						  dancerlimo4.scrollFactor.set(0.4, 0.4);
+						  dancerlimo4.scale.set(1.1, 1.1);
+						  dancerlimo5 = new BackgroundDancer(1400 , -1000);
+						  dancerlimo5.scrollFactor.set(0.4, 0.4);
+						  dancerlimo5.scale.set(1.1, 1.1);
+
 		                  overlayShit = new FlxSprite(-500, -600).loadGraphic(Paths.image('limopreload/limoOverlay'));
 		                  overlayShit.alpha = 0.5;
-		                  // add(overlayShit);
 
-		                  // var shaderBullshit = new BlendModeEffect(new OverlayShader(), FlxColor.RED);
+						  trace(dancer.x);
 
-		                  // FlxG.camera.setFilters([new ShaderFilter(cast shaderBullshit.shader)]);
-
-		                  // overlayShit.shader = shaderBullshit;
 
 		                  var limoTex = Paths.getSparrowAtlas('limopreload/limoDrive');
 
@@ -807,7 +830,13 @@ class PlayState extends MusicBeatState
 
 						add(dancer1);
 						add(dancer2);
+						add(dancerlimo2);
+						add(dancerlimo3);
+						add(dancerlimo1);
+						add(dancerlimo4);
+						add(dancerlimo5);
 						add(dad);
+						
 
 						gfstageCurtains = new FlxSprite(-550, -400).loadGraphic(Paths.image('stage/stagecurtains'));
 						gfstageCurtains.setGraphicSize(Std.int(gfstageCurtains.width * 0.9));
@@ -817,10 +846,39 @@ class PlayState extends MusicBeatState
 						gfstageCurtains.active = false;
 
 						add(gfstageCurtains);
-
+						screen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+						screen.alpha = 0;
+						screen.scale.set(3, 3);
+						screen.cameras = [camGame];
+						
+						bop = new FlxSprite(10000, 500);
+						bop.frames = Paths.getSparrowAtlas('preload/characters');
+						bop.animation.addByPrefix('idle', 'back characters', 24, false);
+						
+						bop2 = new FlxSprite(-10000, 400);
+						bop2.frames = Paths.getSparrowAtlas('preload/characters');
+						bop2.animation.addByPrefix('idle', 'front characters', 24, false);
+						bop2.visible = false;
+						bop.visible = false;
 						gfstageCurtains.visible = false;
 						gfstageFront.visible = false;
 						stagebg.visible = false;
+
+						introsong.frames = Paths.getSparrowAtlas('intro');
+						introsong.animation.addByPrefix("idle", "intro", 24);
+						introsong.antialiasing = true;
+						introsong.screenCenter();
+						introsong.scrollFactor.set();
+
+						
+						lightroom = new FlxSprite(0, 0).loadGraphic(Paths.image('nothing'));
+						lightroom.screenCenter();
+						lightroom.updateHitbox();
+						lightroom.antialiasing = true;
+						lightroom.cameras = [camGame];
+						lightroom.scale.set(5,5);
+						lightroom.active = false;
+						
 		          }
               }
 
@@ -927,6 +985,15 @@ class PlayState extends MusicBeatState
 		pico.x -= 300;
 		add(boyfriend);
 		add(gfstageCurtains);
+		
+		add(bop2);
+		add(bop);
+		//add(introsong);
+		if (SONG.song.toLowerCase() == "ok-friday")
+			{
+				add(lightroom);
+			}
+			
 		
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -1211,6 +1278,13 @@ class PlayState extends MusicBeatState
 		super.create();
 	}
 
+	function intro(){
+		
+		FlxTween.tween(FlxG.camera, {zoom: 1}, 1, {ease: FlxEase.quadInOut});
+		
+
+	}
+
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void
 	{
@@ -1311,7 +1385,7 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 
-		var swagCounter:Int = 0;
+		swagCounter = 0;
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -1340,7 +1414,10 @@ class PlayState extends MusicBeatState
 
 			{
 				case 0:
+					if(!introstart)
 					FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					introsong.animation.stop();
+					introsong.active = false;
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 					ready.scrollFactor.set();
@@ -1358,6 +1435,7 @@ class PlayState extends MusicBeatState
 							ready.destroy();
 						}
 					});
+					if(!introstart)
 					FlxG.sound.play(Paths.sound('intro2'), 0.6);
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
@@ -1375,6 +1453,7 @@ class PlayState extends MusicBeatState
 							set.destroy();
 						}
 					});
+					if(!introstart)
 					FlxG.sound.play(Paths.sound('intro1'), 0.6);
 				case 3:
 					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
@@ -1394,6 +1473,7 @@ class PlayState extends MusicBeatState
 							go.destroy();
 						}
 					});
+					if(!introstart)
 					FlxG.sound.play(Paths.sound('introGo'), 0.6);
 				case 4:
 			}
@@ -1413,6 +1493,16 @@ class PlayState extends MusicBeatState
 		FlxG.save.data.gf = false;
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
+	
+				dontevensing();
+				singnow('bf');
+				singnow('dad');
+			if(curSong == 'Ok-Friday')
+				{
+					camHUD2.alpha = 0;
+					camHUD.alpha = 0;
+				}
+		
 
 		if (!paused)
 			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
@@ -2887,21 +2977,38 @@ class PlayState extends MusicBeatState
 				switch(curStep)
 				{
 					case 1:
+						center = true;
 						dontevensing();
 						singnow('dad');
 						singnow('bf');
+						//FlxTween.tween(screen, {alpha: 1}, 2);
+					case 80:
+						
+					case 94:
+						intro();
+						FlxTween.tween(lightroom, {alpha: 0}, 1);
+					case 101:
+						defaultCamZoom = 0.9;
+					//	camZooming = false;
+						center = false;
+						FlxTween.tween(camHUD, {alpha: 1}, 1);
+						FlxTween.tween(camHUD2, {alpha: 1}, 1);
 					case 220:
 						center = true;
 					case 226:
-						
+						camHUD.visible = false;
+						camHUD2.visible = false;
 						boyfriend.playAnim('hey');
 						dad.playAnim('yeah');
+						gf.playAnim('cheer');
 						defaultCamZoom = 0.8;
 						center = true;
 					case 228:
 						FlxG.camera.follow(camFollow, 0.02);
 						defaultCamZoom = 0.9;
 						center = false;
+						camHUD.visible = true;
+						camHUD2.visible = true;
 					case 356:
 						FlxTween.tween(pico, {x: 300}, {ease: FlxEase.expoInOut});
 							dontevensing();
@@ -2909,6 +3016,7 @@ class PlayState extends MusicBeatState
 							singnow('bf');
 							dad.playAnim('idle');
 							FlxTween.tween(camHUD, {alpha: 0}, 1);
+							FlxTween.tween(camHUD2, {alpha: 0}, 1);
 							iconP2.animation.play("pico");
 					case 388:
 						defaultCamZoom = 1;
@@ -2916,8 +3024,14 @@ class PlayState extends MusicBeatState
 						defaultCamZoom = 1.5;
 					case 393:
 						defaultCamZoom = 0.9;
+						boyfriend.playAnim('hey');
+						dad.playAnim('yeah');
+						gf.playAnim('cheer');
+					case 396:
+						dad.playAnim('idle');
 					case 480:
-						FlxTween.tween(camHUD, {alpha: 100}, 4);
+						FlxTween.tween(camHUD, {alpha: 1}, 1);
+						FlxTween.tween(camHUD2, {alpha: 1}, 1);
 					case 490:
 						iconP2.animation.play("dad");
 						FlxTween.tween(pico, {x: -1000}, {ease: FlxEase.expoInOut});
@@ -2936,7 +3050,6 @@ class PlayState extends MusicBeatState
 						bgLimo.visible = true;
 						skyBG.visible = true;
 						limo.visible = true;
-						grpLimoDancers.visible = true;
 
 						bg.visible = false;
 						bgPloosh.visible = false;
@@ -2948,67 +3061,227 @@ class PlayState extends MusicBeatState
 						gf.visible = false;
 					case 670:
 						FlxTween.tween(bgLimo, {x: -200}, {ease: FlxEase.expoInOut});
-						FlxTween.tween(dancer, {x: 370}, {ease: FlxEase.expoInOut});
+						FlxTween.tween(dancerlimo1, {x: 90}, {ease: FlxEase.expoInOut});
+					case 693:
+						FlxTween.tween(dancerlimo2, {y: 70}, {ease: FlxEase.expoInOut});
+					case 708:
+						FlxTween.tween(dancerlimo3, {y: 70}, {ease: FlxEase.expoInOut});
+					case 724:
+						FlxTween.tween(dancerlimo4, {y: 70}, {ease: FlxEase.expoInOut});
+					case 743:
+						FlxTween.tween(dancerlimo5, {y: 70}, {ease: FlxEase.expoInOut});
+					case 863:
+						//FlxG.camera.flash(FlxColor.BLACK, 1);
 					case 870:
+						FlxG.camera.flash(FlxColor.BLACK, 5);
 						iconP2.animation.play("gf");
-						remove (dad);
-						dad = new Character( 0, 0,"gfspeakers");
-						add(dad);
-						dad.dance();
-						FlxG.camera.flash(FlxColor.BLACK, 1);
-						defaultCamZoom = 1;
+						remove (pico);
+						pico = new Character(400, 130,"gfspeakers");
 						remove(gf);
-						remove(pico);
+						gf.destroy();
+						gf = new Character(400, 130,"gfr");
+						add(gf);
+						gf.visible = false;
+					
+						
+						defaultCamZoom = 1;
+		
 						dontevensing();
-						dad.playAnim('danceRight');
-						singnow('dad');
+						
+						singnow('pico');
 						singnow('bf');
-						FlxTween.tween(camHUD, {alpha: 0});
+						FlxTween.tween(camHUD, {alpha: 0}, 1);
+						FlxTween.tween(camHUD2, {alpha: 0}, 1);
 						overlayShit.visible = false;
 						  dancer.visible = false;
 						  bgLimo.visible = false;
 						  skyBG.visible = false;
 						  limo.visible = false;
+						  dancerlimo1.visible = false;
+						  dancerlimo2.visible = false;
+						  dancerlimo3.visible = false;
+						  dancerlimo4.visible = false;
+						  dancerlimo5.visible = false;
 						  grpLimoDancers.visible = false;
 						gfstageCurtains.visible = true;
 						gfstageFront.visible = true;
 						stagebg.visible = true;
-						gf.visible = true;
-						dad.x -= 800;
-						remove(pico);
+						gf.visible = false;
+						//dad.x -= 800;
+						//remove(pico);
+						dad.visible = false;
 						remove(boyfriend);
 						boyfriend.destroy();
 						boyfriend = new Boyfriend(770,450,"bf");
+						add(pico);
 						add(boyfriend);
 					case 1026:
-						FlxTween.tween(camHUD, {alpha: 100}, 4);
+						FlxTween.tween(camHUD, {alpha: 1}, 1);
+						FlxTween.tween(camHUD2, {alpha: 1}, 1);
 					case 1069:
 						iconP2.animation.play("dad");
-						gf = new Character(400, 130,"gfspeakers");
-						add(gf);
-						gf.playAnim('danceRight');
-						remove (dad);
-						dad = new Character( 0, 0,"dad");
-						add(dad);
-						dad.dance();
-						add(boyfriend);
+						gf.visible = true;
+						pico.visible = false;
 						FlxG.camera.flash(FlxColor.ORANGE, 2);
-						defaultCamZoom = 0.9;
-						FlxTween.tween(dad, {x: 100}, {ease: FlxEase.expoInOut});
+						
+						dad.visible = true;
 						FlxTween.tween(pico, {x: -800}, {ease: FlxEase.expoInOut});
 						dontevensing();
 						singnow('bf');
 						singnow('dad');
-						
+					case 1071:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1077 | 1232 | 1251:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1088 | 1241 | 1252:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1094 | 1253:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1098 | 1229 | 1254:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1106 | 1235 | 1255:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1111 | 1225 | 1256:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1121 | 1238 | 1257:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1128 | 1258:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1131 | 1218 | 1259:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1136 | 1221 | 1260:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1144 | 1261:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1148 | 1202 | 1261:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1157 | 1262:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1161 | 1216 | 1263:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1776:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1186:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1191 | 1212:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1194:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1194:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1207:
+						defaultCamZoom = 1;
+						new FlxTimer().start(0.3, function(tmr:FlxTimer)
+							{
+								defaultCamZoom = 0.9;
+							});
+					case 1264:
+						FlxG.camera.flash(FlxColor.BLACK, 3);
 					case 1272:
+						
 						FlxG.camera.flash(FlxColor.WHITE, 1);
 						FlxTween.tween(dancer1, {x: -200}, {ease: FlxEase.expoInOut});
 						FlxTween.tween(dancer2, {x: 1000}, {ease: FlxEase.expoInOut});
-						defaultCamZoom = 0.7;
+						defaultCamZoom = 0.9;
+						center = true;
 						dontevensing();
 						singnow('bf');
 						singnow('dad');
-
+					case 1079 | 1091 | 1103 | 1116 | 1128 | 1140 | 1153 | 1166:
+						gf.playAnim('cheer');
+					case 1378:
+						center = true;
+					case 1381:
+						defaultCamZoom = 1.5;
+						center = true;
+					case 1397:
+						FlxG.camera.flash(FlxColor.WHITE, 1);
+						defaultCamZoom = 0.7;
+						FlxTween.tween(bop, {x: -400}, {ease: FlxEase.expoInOut});
+						FlxTween.tween(bop2, {x: -400}, {ease: FlxEase.expoInOut});
+						bop2.visible = true;
+						bop.visible = true;
+						center = true;
 
 					
 				}
@@ -3130,6 +3403,13 @@ class PlayState extends MusicBeatState
 				});
 				dancer1.dance();
 				dancer2.dance();
+				dancerlimo1.dance();
+				dancerlimo2.dance();
+				dancerlimo3.dance();
+				dancerlimo4.dance();
+				dancerlimo5.dance();
+				bop.animation.play('idle', true);
+				bop2.animation.play('idle', true);
 
 				if (FlxG.random.bool(10) && fastCarCanDrive)
 					fastCarDrive();
