@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="characters.png">
+	<!-- Created with Adobe Animate version 19.2.1.408 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="back characters0000" x="2" y="2" width="1975" height="1066" frameX="0" frameY="-16" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0001" x="2" y="2" width="1975" height="1066" frameX="0" frameY="-16" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0002" x="1980" y="2" width="1948" height="1071" frameX="-14" frameY="-10" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0003" x="1980" y="2" width="1948" height="1071" frameX="-14" frameY="-10" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0004" x="2" y="1076" width="1920" height="1078" frameX="-28" frameY="-3" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0005" x="2" y="1076" width="1920" height="1078" frameX="-28" frameY="-3" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0006" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0007" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0008" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0009" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0010" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0011" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0012" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="back characters0013" x="1925" y="1076" width="1920" height="1080" frameX="-28" frameY="0" frameWidth="1975" frameHeight="1082"/>
+	<SubTexture name="front characters0000" x="2" y="2159" width="2006" height="1043" frameX="0" frameY="-37" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0001" x="2" y="2159" width="2006" height="1043" frameX="0" frameY="-37" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0002" x="2011" y="2159" width="1975" height="1055" frameX="-15" frameY="-25" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0003" x="2011" y="2159" width="1975" height="1055" frameX="-15" frameY="-25" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0004" x="2" y="3217" width="1921" height="1075" frameX="-42" frameY="-5" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0005" x="2" y="3217" width="1921" height="1075" frameX="-42" frameY="-5" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0006" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0007" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0008" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0009" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0010" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0011" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0012" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+	<SubTexture name="front characters0013" x="1926" y="3217" width="1921" height="1080" frameX="-42" frameY="0" frameWidth="2006" frameHeight="1080"/>
+</TextureAtlas>
