@@ -188,6 +188,7 @@ class PlayState extends MusicBeatState
 	var dancerlimo5:BackgroundDancer;
 	var picosing:Bool = false;
 	var center:Bool = false;
+	var center2:Bool = false;
 	var bfsing:Bool = false;
 	var p2sing:Bool = false;
 	var bop:FlxSprite;
@@ -850,12 +851,14 @@ class PlayState extends MusicBeatState
 						screen.alpha = 0;
 						screen.scale.set(3, 3);
 						screen.cameras = [camGame];
-						
-						bop = new FlxSprite(10000, 500);
+						//250 400
+						bop = new FlxSprite(10000, 450);
+						bop.scale.set(1.2,1.2);
 						bop.frames = Paths.getSparrowAtlas('preload/characters');
 						bop.animation.addByPrefix('idle', 'back characters', 24, false);
 						
-						bop2 = new FlxSprite(-10000, 400);
+						bop2 = new FlxSprite(-10000, 800);
+						bop2.scale.set(1.5,1.5);
 						bop2.frames = Paths.getSparrowAtlas('preload/characters');
 						bop2.animation.addByPrefix('idle', 'front characters', 24, false);
 						bop2.visible = false;
@@ -878,7 +881,6 @@ class PlayState extends MusicBeatState
 						lightroom.cameras = [camGame];
 						lightroom.scale.set(5,5);
 						lightroom.active = false;
-						
 		          }
               }
 
@@ -985,9 +987,10 @@ class PlayState extends MusicBeatState
 		pico.x -= 300;
 		add(boyfriend);
 		add(gfstageCurtains);
-		
-		add(bop2);
+
 		add(bop);
+		add(bop2);
+		
 		//add(introsong);
 		if (SONG.song.toLowerCase() == "ok-friday")
 			{
@@ -2069,6 +2072,11 @@ class PlayState extends MusicBeatState
 							//camPos.set(gf.getGraphicMidpoint().x, gf.getGraphicMidpoint().y);
 							camFollow.setPosition(gf.getMidpoint().x , gf.getMidpoint().y);
 						}
+					else if (center2 == true)
+						{
+							//camPos.set(gf.getGraphicMidpoint().x, gf.getGraphicMidpoint().y);
+							camFollow.setPosition(gf.getMidpoint().x - 140 , gf.getMidpoint().y + 150);
+						}
 					else if (picosing == false && center == false)
 						{
 							camPos.set(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
@@ -2983,7 +2991,7 @@ class PlayState extends MusicBeatState
 						singnow('bf');
 						//FlxTween.tween(screen, {alpha: 1}, 2);
 					case 80:
-						
+						camHUD.zoom = 0.3;
 					case 94:
 						intro();
 						FlxTween.tween(lightroom, {alpha: 0}, 1);
@@ -3267,7 +3275,7 @@ class PlayState extends MusicBeatState
 						dontevensing();
 						singnow('bf');
 						singnow('dad');
-					case 1079 | 1091 | 1103 | 1116 | 1128 | 1140 | 1153 | 1166:
+					case 1079 | 1091 | 1103 | 1116 | 1128 | 1140 | 1141 | 1153 | 1166:
 						gf.playAnim('cheer');
 					case 1378:
 						center = true;
@@ -3276,12 +3284,14 @@ class PlayState extends MusicBeatState
 						center = true;
 					case 1397:
 						FlxG.camera.flash(FlxColor.WHITE, 1);
-						defaultCamZoom = 0.7;
-						FlxTween.tween(bop, {x: -400}, {ease: FlxEase.expoInOut});
+						defaultCamZoom = 0.5;
+
+						center = false;
+						FlxTween.tween(bop, {x: -600}, {ease: FlxEase.expoInOut});
 						FlxTween.tween(bop2, {x: -400}, {ease: FlxEase.expoInOut});
 						bop2.visible = true;
 						bop.visible = true;
-						center = true;
+						center2 = true;
 
 					
 				}
